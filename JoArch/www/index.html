@@ -1,0 +1,270 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script language="JavaScript" src="javascript/code.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+  </head>
+
+  <body>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#" onclick="openDesign()">Design Microservices</a>
+      <a href="#" onclick= "openDeploy()">Deploy Containers</a>
+    </div>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+              <a id="navbar-brand" class="navbar-brand hvr-grow"href="#" onclick="openHome()">JoArch</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                      <a id="navbar-brand" class="navbar-brand hvr-grow"href="#" onclick="openNav()">&#9776;</a>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div id="main">
+      <div id='loader'>
+          <img src='reload.gif' id="reload" >
+      </div>
+
+          <div class="container-fluid" id="containerHome">
+            <div class="jumbotron" id="jumbotron">
+                <h1>JoArch</h1><br>
+                <p>JoArch is a Jolie Tool for design your microservices System and deploy its on Docker's containers</p>
+            </div>
+        </div>
+
+        <div class="container" id="containerDesign" style="display:none">
+
+          <ul class="nav nav-tabs" style="width: 100%;">
+                <!--<li><button data-toggle="modal" data-target="#newPathModal" class="btn btn-default btn-add-output" style="font-size:20px; padding: 10px; letter-spacing:2px; margin: 8px;">Add path</button></li>-->
+                <li><button data-toggle="modal" data-target="#newMicroservice" class="btn btn-default btn-add-output" style="font-size:20px; padding: 10px; letter-spacing:2px; margin: 8px;">Create microservices</button></li>
+                <li><button data-toggle="modal" data-target="#newLink" class="btn btn-default btn-add-output" style="font-size:20px; padding: 10px; letter-spacing:2px; margin: 8px;">Create Links</button></li>
+                <li style="float:right;"><button class="btn btn-default glyphicon glyphicon-download-alt" onclick="downloadJsonMicro()" style="font-size:20px; padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; letter-spacing:2px; margin: 8px;"></button></li>
+          </ul>
+
+          <div class="modal fade" id="newMicroservice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h3 class="modal-title" style="text-align: center;">Add new microservice</h3>
+                      </div>
+                      <div class="modal-body">
+
+                        <div class="panel panel-default" id="panel">
+                            <div class="panel-heading">
+                              <div class="row">
+                                <label style=" margin: 8px; font-size: 18px;">Name Microservice</label>
+                              </div>
+                            </div>
+                            <div class="panel-body">
+                              <div class="form-group">
+                                  <input type="text" class="form-control" id="nameMicroservice" value="" placeholder="Name Microservice" required>
+                              </div>
+                            </div>
+                            <div class="panel-heading" id="inputHeading">
+                              <div class="row">
+                                <label style=" margin: 8px; font-size: 18px;">Input port</label>
+                                <button type="button"  onclick="duplicateInput()" class="btn btn-default btn-add-output" style="float: right; margin-right: 10px; margin-top: 8px; margin-bottom:8px;">Add</button>
+                              </div>
+                            </div>
+                            <form id="formInput">
+                           </form>
+                           <div class="panel-heading">
+                             <div class="row">
+                               <label style=" margin: 8px; font-size: 18px;">Output port</label>
+                               <button type="button" onclick="duplicateOutput()" class="btn btn-default btn-add-output" style="float: right; margin-right: 10px; margin-top: 8px; margin-bottom:8px;">Add</button>
+                             </div>
+                           </div>
+
+                           <form id="formOutput">
+                          </form>
+                        </div>
+                      </div>
+                      <div class="modal-footer" style="text-align: center;">
+                          <button type="submit" onclick="createMicroservice()" class="btn btn-default btn-add-output" style="margin: 8px; padding: 15px;">Create microservice</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="modal fade" id="newLink" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h3 class="modal-title" style="text-align: center;">Add a new Link </h3>
+                      </div>
+                      <div class="modal-body">
+                          <div class="panel panel-default " id="panel">
+                              <div class="panel-heading">
+                                  <label style=" margin: 8px; font-size: 18px;">Name link</label>
+                              </div>
+                              <div class="panel-body">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="nameLink" value="" placeholder="Insert name of your Link" required>
+                                </div>
+                              </div>
+                              <div class="panel-heading" id="inputHeading">
+                                  <label style=" margin: 8px; font-size: 18px;">Input Microservice </label>
+                              </div>
+                              <div class="panel-body">
+                                  <div class="form-group">
+                                    <select class="form-control" id="selectInput">
+                                    </select>
+                                    <input type="text" class="form-control" id="portInput" placeholder="Insert name of inputport" style="margin-top: 10px;">
+                                  </div>
+                             </div>
+                             <div class="panel-heading">
+                                 <label style=" margin: 8px; font-size: 18px;">Output Microservice</label>
+                             </div>
+                             <div class="panel-body">
+                                 <div class="form-group">
+                                   <select class="form-control" id="selectOutput">
+                                   </select>
+                                   <input type="text" class="form-control" id= "portOutput"  placeholder="Insert name of outputport" style="margin-top: 10px;">
+                                 </div>
+                            </div>
+                          </div>
+                    </div>
+                      <div class="modal-footer" style="text-align: center;">
+                          <button type="submit" onclick="createLink()" class="btn btn-default btn-add-output" style="margin: 8px; padding: 15px;">Create Link</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        <div class="tab-content" id="tabContentDesign" >
+          <div class="container col-md-7">
+              <h2 style="text-align: center; padding: 10px;">Microservices</h2>
+                <div class="container-fluid pre-scrollable" style="max-height: 65%; padding-left:0px;">
+                  <table id="tableMicro"class="table table-striped" style="border: 1px solid; border-color: rgb(221,221,221);">
+                    <thead>
+                      <tr>
+                        <th class="col-md-4">Microservice name</th>
+                        <th class="col-md-4">Inputport name</th>
+                        <th class="col-md-4">Outputport name</th>
+                        <th class="col-md-1"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+          </div>
+
+          <div class="container col-md-5">
+              <h2 style="text-align: center; padding: 10px;">Links</h2>
+                <div class="container-fluid pre-scrollable" style="max-height: 65%; padding-left:0px;">
+                  <table id="tableLink"class="table table-striped" style="border: 1px solid; border-color: rgb(221,221,221);">
+                    <thead>
+                      <tr>
+                        <th class="col-md-3">Link name</th>
+                        <th class="col-md-4">Input Micro</th>
+                        <th class="col-md-4">Output Micro</th>
+                        <th class="col-md-1"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="containerDeploy" style="display:none">
+        <ul class="nav nav-tabs" style="width: 100%;">
+              <li><button id="createCnt"data-toggle="modal" data-target="#newContainer" class="btn btn-default btn-add-output" style="font-size:20px; padding: 10px; letter-spacing:2px; margin: 8px;">Create container</button></li>
+              <li><button id="startContainer"class="btn btn-success" onclick="startContainer()" style="font-size:20px; padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; letter-spacing:2px; margin: 8px;">Start Containers</button></li>
+              <li><button id="resetContainer"class="btn btn-danger" onclick="resetContainer()" style="font-size:20px; padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; letter-spacing:2px; margin: 8px;" disabled>Reset</button></li>
+              <li style="float:right;"><button id="downloadBtn"class="btn btn-default glyphicon glyphicon-download-alt" onclick="downloadJsonCnt()" style="font-size:20px; padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px; letter-spacing:2px; margin: 8px;" disabled></button></li>
+        </ul>
+
+
+
+        <div class="modal fade" id="newContainer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title" style="text-align: center;">Add new Container </h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel panel-default " id="panel">
+                            <div class="panel-heading">
+                                <label style=" margin: 8px; font-size: 18px;">Microservices</label>
+                                <button type="button"  onclick="duplicateMicro()" class="btn btn-default btn-add-output" style="float: right; margin-right: 10px; margin-top: 8px; margin-bottom:8px;">Add</button>
+                            </div>
+                            <div class="panel-body" id="microContainer">
+                                <div class="form-inline" id="micro-0">
+                                  <select class="form-control" id="select-0" style="width:70%;">
+                                  </select>
+                                  <input type="checkbox" value="" style="margin-left: 15px;" id="trace-0">
+                                  <label style=" font-size: 15px;">Trace</label>
+                                  <input style="width:70%; margin-top: 10px;" type="text" class="form-control" id="urlMicro-0" placeholder="GitHub URL of your microservice ">
+                                </div>
+                           </div>
+                        </div>
+                  </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button type="submit" onclick="createContainer()" class="btn btn-default btn-add-output" style="margin: 8px; padding: 15px;">Create Container</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <div class="tab-content" id="tabContentCnt">
+        <div class="container col-md-12">
+            <h2 style="text-align: center; padding: 10px;">Containers</h2>
+              <div class="container-fluid pre-scrollable" style="max-height: 65%; padding-left:0px;">
+                <table id="tableContainer"class="table table-striped" style="border: 1px solid; border-color: rgb(221,221,221);">
+                  <thead>
+                    <tr>
+                      <th class="col-md-4">Container</th>
+                      <th class="col-md-2">Microservices name</th>
+                      <!--<th class="col-md-4">Links name</th>-->
+                      <th class="col-md-1"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="alert alert-danger alert-dismissable" style="text-align:center; border-color: rgb(242, 222, 222); margin: 0px;">
+                <a href="#" class="close" data-dismiss="modal" aria-label="close">×</a>
+                <strong style="font-size: 30px;">Error!</strong>
+              </div>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+  </div>
+</body>
+
+</html>

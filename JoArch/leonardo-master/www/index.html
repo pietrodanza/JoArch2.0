@@ -1,0 +1,805 @@
+<!--
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                                                    *
+* Copyright (C) 2017 Vincenzo Mattarella <vinsmattarella@gmail.com>                  *
+*                                                                                    *
+* Permission is hereby granted, free of charge, to any person obtaining a copy of    *
+* this software and associated documentation files (the "Software"), to deal in the  *
+* Software without restriction, including without limitation the rights to use,      *
+* copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the    *
+* Software, and to permit persons to whom the Software is furnished to do so, subject*
+* to the following conditions:                                                       *
+*                                                                                    *
+* The above copyright notice and this permission notice shall be included in all     *
+* copies or substantial portions of the Software.                                    *
+*                                                                                    *
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,*
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A      *
+* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT *
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION  *
+* OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE     *
+* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                             *
+*                                                                                    *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+-->
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascript/code.js"></script>
+    <script type="text/javascript" src="/javascript/treeJolieValue.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/treeStyle.css">
+    <style type="text/css">
+    .btn-primary {
+        color: #fff;
+        background-color: #000000;
+        border-color: #000000;
+    }
+
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #000000;
+        border-color: #000000;
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li id="home" class="active"><a id="homePageController" href="#">Homepage <span class="sr-only">(current)</span></a></li>
+            </div>
+        </div>
+    </nav>
+    <div id="mainDiv" class="container-fluid">
+        <div class="row content">
+            <div id="sideDiv" class="col-sm-3 sidenav">
+                <h3>Available Informations</h3>
+                <div id="sideDiv_List">
+                    <ul id="fileName" class="nav nav-pills nav-stacked">
+                    </ul>
+                    <br>
+                </div>
+                <div style="margin-top: 3vh;">
+                    <button id="mergeButton" type="button" class="btn btn-primary btn-sm">Merge checked</button>
+                    <button id="refreshListButton" type="button" class="btn btn-primary btn-sm">Refresh file list</button>
+                </div>
+                <div style="margin-top: 5px;">
+                    <button id="addPathButton" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newPathModal">Add new path</button>
+                    <button id="removePathButton" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deletePathModal">Remove path</button>
+                </div>
+            </div>
+            <div id="mainDiv" class="col-sm-9">
+                <div id="titleDiv">
+                    <h2 id="tableTitle">Choose a Json File</h2>
+                    <div>
+                        <div style="display: inline; font-weight: bold;" id="left">Refresh Json File &nbsp;</div>
+                        <div style="display: inline; font-weight: bold; margin-left: 5%" id="instance">Filter Instance &nbsp;</div>
+                        <div style="display: inline; font-weight: bold; margin-left: 15%" id="right">Filter Table &nbsp;</div>
+                    </div>
+                    <div style="display: flex">
+                        <div style="display: inline;" id="buttonElement">
+                            <button id="refreshButton" class="glyphicon glyphicon-refresh"></button>
+                        </div>
+                        <div style="display: inline; margin-left: 10%">
+                            <select class="form-control" id="instancesFilter" style="width: 20vh;">
+                                <option>Choose instance</option>
+                                <option>No Filters</option>
+                            </select>
+                        </div>
+                        <div style="display: inline; margin-left: 5%" id="selectElement">
+                            <select class="form-control" id="elementsFilter" style="width: 20vh;">
+                                <option>Choose a filter</option>
+                                <option>Assignment</option>
+                                <option>Errors</option>
+                                <option>Fault</option>
+                                <option>Install</option>
+                                <option>One Way</option>
+                                <option>PostIncrement</option>
+                                <option>PreIncrement</option>
+                                <option>PostDecrement</option>
+                                <option>PreDecrement</option>
+                                <option>Request Response</option>
+                                <option>Solicit Response</option>
+                                <option>Scope</option>
+                                <option>No Filters</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="tableDiv" class="container">
+                    <table id="valueTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Instr.</th>
+                                <th>Timestamp</th>
+                                <th>Servicename</th>
+                                <th>Instance</th>
+                                <th>Action</th>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>ValueToAssign</th>
+                                <th>MSG_ID</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"> </tbody>
+                    </table>
+                    <div id="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal to handle the view of a Jolie Value -->
+    <div class="modal fade" id="valueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="modalBody" class="modal-body">
+                    <div id="esperimento">
+                        <div id="provaUl">
+                            <div id='genericTree'></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="closingButton" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal to handle the add of a new path -->
+    <div class="modal fade" id="newPathModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Here you can add a new Path</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="usr">Insert the path:</label>
+                    <input type="text" class="form-control" id="usr">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="savePathButton" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Modal that handles the delete of a path -->
+    <div class="modal fade" id="deletePathModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select the paths you want to remove</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="pathContainer">
+                    <ul id="pathToDeleteList">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="deletePathConfirmButton" type="button" class="btn btn-primary">Delete Path</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var count;
+    var arrayIndex;
+    var array;
+    var mergingArray = new Array;
+
+    //Here are stored all paths in which json data are stored
+    var totalResults;
+    var mergedArray = new Array;
+    var instancesArray = new Array;
+    var tempTable = new Array;
+    var merged = false;
+    var jsonDeleteList = new Array;
+
+
+    //Global variables that contain the startIndex and the endIndex that have to be shown to the user
+    var startIndex = 0;
+    var endIndex = 50;
+
+    //Counter that contains the number of expansions of results
+    var sequenceSearchNumber = 0;
+
+    //When document is ready
+    var pathsToInspectRefresh = new Array;
+    document.getElementById("fileName").innerHTML = "";
+    Jolie.askForFileList(
+        'inspectConfig',
+        function(response) {
+            if (response.jsonData != "[]") {
+                var receivedJSON = response.jsonData;
+                var js = JSON.parse(receivedJSON);
+                for (var i = 0; i < js.length; i++) {
+                    pathsToInspectRefresh.push(js[i].path);
+                }
+                Jolie.askForJSONList(
+                    'sendJSONList', { pathValue: pathsToInspectRefresh },
+                    function(response) {
+                        totalResults = response;
+                        parseFileList();
+                        for (var i = 0; i < totalResults.filesList.length; i++) {
+                            document.getElementById("fileName").innerHTML += "<li id='li" + i + "'></li>";
+                            document.getElementById("li" + i).innerHTML += "<div id='divCheckNumber" + i + "' style='margin-top:2vh'><input id='checkNumber" + i + "' style='margin-right:1em;' class='form-check-input' type='checkbox' value=''><input style='width:3em; height:2em margin-left:1em;' id='colorPalette" + i + "' name='Color Picker' type='color' value='#7dbce8'/><a style='margin-left:1em' id='" + i + "' href='#section1'>" + totalResults.filesList[i].fileName.substring(0, totalResults.filesList[i].fileName.length - 5) + "</a></div> ";
+
+                        }
+                    });
+            }
+        }
+    );
+
+    //Function that draws the table based on filename clicked
+    $('body').on('click', 'a', function() {
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+        //If I click directly on the filename the result will not a merge
+        merged = false;
+        array = null;
+        mergingArray = null;
+        $("#tableBody").empty();
+        var $this = $(this);
+        $('li[id^="li"]').removeClass("active");
+        $("#li" + $(this).attr("id")).addClass("active");
+        arrayIndex = $this.attr("id");
+        Jolie.askForJSON(
+            'sendSingleJSON', { path: totalResults.filesList[arrayIndex].filePath + totalResults.filesList[arrayIndex].fileName },
+            function(response) {
+                var receivedJSON = response.jsonData;
+                array = JSON.parse("[" + receivedJSON + "]");
+                document.getElementById("tableTitle").innerText = array[0].ServiceName;
+                drawMerged(array);
+                $("#moreResultsButton").css("display", "");
+            }
+        );
+    });
+
+
+    //Action for the button that refresh the table's content (e.g. in case the program execution produced other informations)
+    $('#refreshButton').click(function() {
+
+        //With a refresh request the indexes are cleared
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+
+        $('#elementsFilter').val('Choose a filter');
+        $('#instancesFilter').val('Choose instance');
+
+        if (merged == true) {
+            instancesArray = [];
+            array = null;
+            mergingArray = null;
+            $("#tableBody").empty();
+            informations = new Array;
+            mergedArray = new Array;
+            $(':checkbox').each(function() {
+                if (this.checked) {
+                    var checkedButton = this.getAttribute("id").substr(11);
+                    obj = {
+                        fileNumber: checkedButton,
+                        color: document.getElementById("colorPalette" + checkedButton).value
+                    }
+                    informations.push(obj);
+                }
+            });
+            mergeFiles(informations);
+        } else {
+
+            $("#tableBody").empty();
+            Jolie.askForJSON(
+                'sendSingleJSON', { path: totalResults.filesList[arrayIndex].filePath + totalResults.filesList[arrayIndex].fileName },
+                function(response) {
+                    var receivedJSON = response.jsonData;
+                    array = JSON.parse("[" + receivedJSON + "]");
+                    document.getElementById("tableTitle").innerText = array[0].ServiceName;
+                    drawMerged(array);
+                }
+            );
+        }
+    });
+
+    //When the modal is opened I want to see the Value 
+    $('#valueModal').on('show.bs.modal', function(e) {
+        buttonId = e.relatedTarget.getAttribute("id").substring(5);
+        var instructionNumberObtained = $('#row' + buttonId + ' > td:first-child').text();
+        var timestampObtained = $('#row' + buttonId + ' > td:nth-child(2)').text();
+        var serviceNameObtained = $('#row' + buttonId + ' > td:nth-child(3)').text();
+        var actionObtained = $('#row' + buttonId + ' > td:nth-child(5)').text();
+        var descriptionObtained = $('#row' + buttonId + ' > td:nth-child(7)').text();
+        console.log("Button");
+        console.log(buttonId);
+        console.log(instructionNumberObtained + " - " +timestampObtained + " - " + serviceNameObtained + " - " + actionObtained + " - " + descriptionObtained);
+
+        for (var i = 0; i < array.length; i++) {
+            if(instructionNumberObtained == array[i].InstructionNumber && timestampObtained == array[i].Timestamp && serviceNameObtained == array[i].ServiceName && actionObtained == array[i].Action && descriptionObtained == array[i].Description){
+                console.log(array[i]);
+                var javascriptVal = array[i].Value;
+                if (javascriptVal != null && javascriptVal != undefined) {
+                count = 0;
+                //Uses treeJolieValue.js to handle the value's rapresentation
+                scan(javascriptVal, 0, true, false, "modalBody");
+            } else {
+                document.getElementById("modalBody").innerText = array[i].ValueToAssign;
+            }
+            }
+        }
+    });
+
+
+    //When I close the modal I want to erase the content
+    $('#valueModal').on('hide.bs.modal', function(e) {
+        document.getElementById("modalBody").innerHTML = "";
+    });
+
+
+    //Refrest the list of available files 
+    $("#refreshListButton").click(function() {
+        var pathsToInspectRefresh = new Array;
+        document.getElementById("fileName").innerHTML = "";
+        Jolie.askForFileList(
+            'inspectConfig',
+            function(response) {
+                if (response.jsonData != "[]") {
+                    var receivedJSON = response.jsonData;
+                    var js = JSON.parse(receivedJSON);
+                    for (var i = 0; i < js.length; i++) {
+                        pathsToInspectRefresh.push(js[i].path);
+                    }
+                    Jolie.askForJSONList(
+                        'sendJSONList', { pathValue: pathsToInspectRefresh },
+                        function(response) {
+                            totalResults = response;
+                            parseFileList();
+                            for (var i = 0; i < totalResults.filesList.length; i++) {
+                                document.getElementById("fileName").innerHTML += "<li id='li" + i + "'></li>";
+                                document.getElementById("li" + i).innerHTML += "<div id='divCheckNumber" + i + "' style='margin-top:2vh'><input id='checkNumber" + i + "' style='margin-right:1em;' class='form-check-input' type='checkbox' value=''><input style='width:3em; height:2em margin-left:1em;' id='colorPalette" + i + "' name='Color Picker' type='color' value='#7dbce8'/><a style='margin-left:1em' id='" + i + "' href='#section1'>" + totalResults.filesList[i].fileName.substring(0, totalResults.filesList[i].fileName.length - 5) + "</a></div> ";
+
+                            }
+                        });
+                }
+            }
+        );
+
+    });
+
+    $('#savePathButton').click(function() {
+        var pathToAdd = $('#usr').val();
+        if (pathToAdd.charAt(0) != "/") {
+            pathToAdd = "/" + pathToAdd;
+        }
+        if (pathToAdd.charAt(pathToAdd.length - 1) != "/") {
+            pathToAdd = pathToAdd + "/";
+        }
+        Jolie.addPath(
+            'saveNewPath', { path: pathToAdd },
+            function(response) {
+
+                var pathsToInspectRefresh = new Array;
+                document.getElementById("fileName").innerHTML = "";
+                Jolie.askForFileList(
+                    'inspectConfig',
+                    function(response) {
+                        if (response.jsonData != "[]") {
+                            var receivedJSON = response.jsonData;
+                            var js = JSON.parse(receivedJSON);
+                            for (var i = 0; i < js.length; i++) {
+                                pathsToInspectRefresh.push(js[i].path);
+                            }
+                            Jolie.askForJSONList(
+                                'sendJSONList', { pathValue: pathsToInspectRefresh },
+                                function(response) {
+                                    totalResults = response;
+                                    parseFileList();
+                                    for (var i = 0; i < totalResults.filesList.length; i++) {
+                                        document.getElementById("fileName").innerHTML += "<li id='li" + i + "'></li>";
+                                        document.getElementById("li" + i).innerHTML += "<div id='divCheckNumber" + i + "' style='margin-top:2vh'><input id='checkNumber" + i + "' style='margin-right:1em;' class='form-check-input' type='checkbox' value=''><input style='width:3em; height:2em margin-left:1em;' id='colorPalette" + i + "' name='Color Picker' type='color' value='#7dbce8'/><a style='margin-left:1em' id='" + i + "' href='#section1'>" + totalResults.filesList[i].fileName.substring(0, totalResults.filesList[i].fileName.length - 5) + "</a></div> ";
+
+                                    }
+                                });
+                        }
+                    }
+                );
+            }
+        );
+        $('#newPathModal').modal('toggle');
+        $("#usr").val("");
+    });
+
+    $('#newPathModal').on('hide.bs.modal', function(e) {
+
+        //var pathsToInspectRefresh = new Array;
+        $("#usr").val("");
+    });
+
+    //The click on home button
+    $('#homePageController').click(function() {
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+        location.reload();
+    });
+
+    //This event handles the merge of more json files
+    $("#mergeButton").click(function() {
+        $("#moreResultsButton").css("display", "");
+        $('#elementsFilter').val('Choose a filter');
+        $('#instancesFilter').val('Choose instance');
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+        merged = true;
+        instancesArray = [];
+        array = null;
+        mergingArray = null;
+        $("#tableBody").empty();
+        informations = new Array;
+        mergedArray = new Array;
+        $(':checkbox').each(function() {
+            if (this.checked) {
+                var checkedButton = this.getAttribute("id").substr(11);
+                obj = {
+                    fileNumber: checkedButton,
+                    color: document.getElementById("colorPalette" + checkedButton).value
+                }
+                informations.push(obj);
+            }
+        });
+        mergeFiles(informations);
+    });
+
+    //This function creates one array in which are contained the informations of all files 
+    function mergeFiles(informations) {
+        var totalRows = new Array;
+        for (var i = 0; i < informations.length; i++) {
+            var path = totalResults.filesList[informations[i].fileNumber].filePath;
+            var name = totalResults.filesList[informations[i].fileNumber].fileName;
+            $("#tableBody").empty();
+            Jolie.askForJSON(
+                'sendSingleJSON', { path: path + name },
+                function(response) {
+                    var receivedJSON = response.jsonData;
+                    var temp = JSON.parse("[" + receivedJSON + "]");
+                    for (var j = 0; j < temp.length; j++) {
+                        temp[j].Color = informations[i].color;
+                        totalRows.push(temp[j]);
+                    }
+                    mergedArray = new Array;
+                }
+            );
+        };
+        mergingArray = new Array;
+        timeParser(totalRows);
+
+    }
+
+    //Function that convert the Timestamp attribute to Epoch number (to make the sorting)
+    function timeParser(arrayToParse) {
+        mergingArray = arrayToParse;
+        tempTableMerged = arrayToParse;
+        for (var i = 0; i < tempTableMerged.length; i++) {
+            var date = tempTableMerged[i].Timestamp.substr(0, 6) + "20" + tempTableMerged[i].Timestamp.substr(0, 2);
+            var hour = tempTableMerged[i].Timestamp.substr(9);
+            var hours = hour.substr(0, 2);
+            var minutes = hour.substr(3, 2);
+            var seconds = hour.substr(6, 2);
+            var millis = hour.substr(9);
+            var day = date.substr(0, 2);
+            var month = date.substr(3, 2);
+            var year = date.substr(6);
+            var finalDate = new Date();
+            finalDate.setMilliseconds(millis);
+            finalDate.setSeconds(seconds);
+            finalDate.setHours(hours);
+            finalDate.setMinutes(minutes);
+            finalDate.setDate(day);
+            finalDate.setMonth(month - 1);
+            finalDate.setFullYear(year - 1);
+            tempTableMerged[i].SortTime = finalDate.getTime();
+        }
+        sortArray(tempTableMerged);
+        drawMerged(tempTableMerged);
+    }
+
+    //Function that handles the writing on informations on the webpage
+    function drawMerged(arrayToDraw) {
+        instancesArray = [];
+        array = arrayToDraw;
+        //Although I show 50 records I want to have the instances number
+        for (var i = 0; i < array.length; i++) {
+            var x = parseInt(array[i].Instance, 10);
+            if (!isInArray(x, instancesArray)) {
+                instancesArray.push(x);
+            }
+        }
+        for (var i = startIndex; i < endIndex; i++) {
+
+            if (array[i] != undefined) {
+
+                document.getElementById("tableBody").innerHTML += "<tr style='background-color:" + array[i].Color + "' id='row" + i + "'>";
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].InstructionNumber + "</td>";
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].Timestamp + "</td>";
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].ServiceName + "</td>";
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].Instance + "</td>";
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].Action + "</td>";
+                if (array[i].Operator != undefined) {
+                    document.getElementById("row" + i).innerHTML += "<td>" + array[i].Operator + "</td>";
+                } else {
+                    document.getElementById("row" + i).innerHTML += "<td></td>";
+                }
+                document.getElementById("row" + i).innerHTML += "<td>" + array[i].Description + "</td>";
+                if (array[i].ValueToAssign != undefined) {
+                    document.getElementById("row" + i).innerHTML += "<td>" + array[i].ValueToAssign + "</td>";
+                } else {
+                    document.getElementById("row" + i).innerHTML += "<td></td>";
+                }
+                if (array[i]["MSG_ID"] != undefined) {
+                    document.getElementById("row" + i).innerHTML += "<td>" + array[i]["MSG_ID"] + "</td>";
+                } else {
+                    document.getElementById("row" + i).innerHTML += "<td></td>";
+                }
+                document.getElementById("row" + i).innerHTML += "<td> <button id='modal" + i + "' class='btn btn-primary' data-toggle='modal' data-target='#valueModal'>click</button></td>";
+                document.getElementById("tableBody").innerHTML += "</tr>";
+            }
+        }
+
+        //Add all the instances number to the filters select
+        instancesArray.sort(function(a, b) {
+            return a - b;
+        });
+        document.getElementById("instancesFilter").innerHTML = "<option>Choose instance</option><option>No Filters</option>";
+
+        for (var i = 0; i < instancesArray.length; i++) {
+            document.getElementById("instancesFilter").innerHTML += "<option>" + instancesArray[i] + "</option>";
+        }
+    }
+
+
+    function isInArray(value, array) {
+        return array.indexOf(value) > -1;
+    }
+
+    //Event called when is selected an option from the filters select
+    $("#elementsFilter").change(function() {
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+        var search = $(this).val();
+        if (search == "No Filters") {
+
+            $('#elementsFilter').val('Choose a filter');
+            $('#instancesFilter').val('Choose instance');
+
+            $("#tableBody").empty();
+            drawMerged(array);
+        } else {
+            $("#tableBody").empty();
+            var filter = "Action";
+            search = search.toUpperCase();
+            checkFiltersAndDraw();
+        }
+    });
+
+
+    //Event called when is selected an option from the instances select
+    $("#instancesFilter").change(function() {
+
+        sequenceSearchNumber = 0;
+        startIndex = 0;
+        endIndex = 50;
+        var search = $(this).val();
+        if (search == "No Filters") {
+
+            $('#elementsFilter').val('Choose a filter');
+            $('#instancesFilter').val('Choose instance');
+
+            instancesArray = [];
+            $("#tableBody").empty();
+            drawMerged(array);
+        } else {
+            $("#tableBody").empty();
+            var filter = "Instance";
+            checkFiltersAndDraw();
+        }
+    });
+
+    function checkFiltersAndDraw() {
+        tempTable = [];
+        var instanceFilter = $("#instancesFilter").val();
+        var genericFilter = $("#elementsFilter").val();
+        for (var i = 0; i < array.length; i++) {
+            if ((array[i]["Action"] == genericFilter.toUpperCase() && array[i]["Instance"] == instanceFilter) || (array[i]["Action"] == genericFilter.toUpperCase() && instanceFilter == "Choose instance") || (array[i]["Instance"] == instanceFilter && genericFilter == "Choose a filter")) {
+                tempTable.push(array[i]);
+            } else if (instanceFilter == "Choose instance" && genericFilter == "Choose a filter") {
+                tempTable = array;
+            }
+        }
+
+        draw();
+    }
+
+    //In this case is handled the draw of a filtered temporary table
+    function draw() {
+        sortArray(tempTable);
+        for (var i = startIndex; i < endIndex; i++) {
+
+            if (tempTable[i] != undefined) {
+            document.getElementById("tableBody").innerHTML += "<tr style='background-color:" + tempTable[i].Color + "' id='row" + i + "'>";
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].InstructionNumber + "</td>";
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].Timestamp + "</td>";
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].ServiceName + "</td>";
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].Instance + "</td>";
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].Action + "</td>";
+            if (tempTable[i].Operator != undefined) {
+                document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].Operator + "</td>";
+            } else {
+                document.getElementById("row" + i).innerHTML += "<td></td>";
+            }
+            document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].Description + "</td>";
+            if (tempTable[i].ValueToAssign != undefined) {
+                document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i].ValueToAssign + "</td>";
+            } else {
+                document.getElementById("row" + i).innerHTML += "<td></td>";
+            }
+            if (tempTable[i]["MSG_ID"] != undefined) {
+                document.getElementById("row" + i).innerHTML += "<td>" + tempTable[i]["MSG_ID"] + "</td>";
+            } else {
+                document.getElementById("row" + i).innerHTML += "<td></td>";
+            }
+            document.getElementById("row" + i).innerHTML += "<td> <button id='modal" + i + "' class='btn btn-primary' data-toggle='modal' data-target='#valueModal'>click</button></td>";
+            document.getElementById("tableBody").innerHTML += "</tr>";
+        }
+        }
+    }
+
+
+    function sortArray(arrayToMerge) {
+        arrayToMerge.sort(function(a, b) {
+            return a.SortTime - b.SortTime || a.InstructionNumber - b.InstructionNumber;
+        });
+    }
+
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > $(window).height() / 2) {
+            sequenceSearchNumber++;
+            startIndex = sequenceSearchNumber * 50;
+            endIndex = startIndex + 50;
+            var instanceFilter = $("#instancesFilter").val();
+            var genericFilter = $("#elementsFilter").val();
+            if (instanceFilter == "Choose instance" && genericFilter == "Choose a filter") {
+                drawMerged(array);
+            } else {
+                checkFiltersAndDraw();
+            }
+        }
+    });
+
+    //When the modal shows up are shown all the paths available
+    $('#deletePathModal').on('show.bs.modal', function(e) {
+        Jolie.askForFileList(
+            'inspectConfig',
+            function(response) {
+                if (response.jsonData != "[]") {
+                    var receivedJSON = response.jsonData;
+                    receivedArray = JSON.parse(receivedJSON);
+                    for (var i = 0; i < receivedArray.length; i++) {
+                        document.getElementById("pathToDeleteList").innerHTML += " <div><input id='deleteCheckNumber" + i + "' type='checkbox' style='display: inline;'><label id='deleteLabel" + i + "' style='margin-left: 1%; display: inline;'>" + receivedArray[i].path + "</label></div>";
+                    }
+                }
+            }
+        );
+    });
+
+
+
+    //When I close the modal I want to erase the content
+    $('#deletePathModal').on('hide.bs.modal', function(e) {
+        document.getElementById("pathToDeleteList").innerHTML = "";
+    });
+
+    $("#deletePathConfirmButton").click(function() {
+        var listToDelete = new Array;
+        $(':checkbox').each(function() {
+            if (this.checked) {
+                var checkedButton = this.getAttribute("id");
+                var labelNumber = "deleteLabel" + checkedButton.substr(17);
+                var path = $("#" + labelNumber).text();
+                listToDelete.push(path);
+            }
+        });
+        Jolie.delete(
+            'deletePath', { pathValue: listToDelete },
+            function(response) {
+                listToDelete = [];
+                var pathsToInspectRefresh = new Array;
+                document.getElementById("fileName").innerHTML = "";
+                Jolie.askForFileList(
+                    'inspectConfig',
+                    function(response) {
+                        if (response.jsonData != "[]") {
+                            var receivedJSON = response.jsonData;
+                            var js = JSON.parse(receivedJSON);
+                            for (var i = 0; i < js.length; i++) {
+                                pathsToInspectRefresh.push(js[i].path);
+                            }
+                            Jolie.askForJSONList(
+                                'sendJSONList', { pathValue: pathsToInspectRefresh },
+                                function(response) {
+                                    totalResults = response;
+                                    parseFileList();
+                                    for (var i = 0; i < totalResults.filesList.length; i++) {
+                                        document.getElementById("fileName").innerHTML += "<li id='li" + i + "'></li>";
+                                        document.getElementById("li" + i).innerHTML += "<div id='divCheckNumber" + i + "' style='margin-top:2vh'><input id='checkNumber" + i + "' style='margin-right:1em;' class='form-check-input' type='checkbox' value=''><input style='width:3em; height:2em margin-left:1em;' id='colorPalette" + i + "' name='Color Picker' type='color' value='#7dbce8'/><a style='margin-left:1em' id='" + i + "' href='#section1'>" + totalResults.filesList[i].fileName.substring(0, totalResults.filesList[i].fileName.length - 5) + "</a></div> ";
+
+                                    }
+                                });
+                        }
+                    }
+                );
+
+
+            }
+        );
+        $('#deletePathModal').modal('toggle');
+    });
+
+    //Function that handles the parse and the sort of the filenames based on timestamp
+    function parseFileList() {
+        var tempTotalResults = totalResults;
+        for (var i = 0; i < tempTotalResults.filesList.length; i++) {
+            var date = tempTotalResults.filesList[i].fileName.substr(0, 6) + "20" + tempTotalResults.filesList[i].fileName.substr(6, 2);
+            var hour = tempTotalResults.filesList[i].fileName.substr(11, 12);
+            var hours = hour.substr(0, 2);
+            var minutes = hour.substr(3, 2);
+            var seconds = hour.substr(6, 2);
+            var millis = hour.substr(9);
+            var day = date.substr(0, 2);
+            var month = date.substr(3, 2);
+            var year = date.substr(6);
+            var finalDate = new Date();
+            finalDate.setMilliseconds(millis);
+            finalDate.setSeconds(seconds);
+            finalDate.setHours(hours);
+            finalDate.setMinutes(minutes);
+            finalDate.setDate(day);
+            finalDate.setMonth(month - 1);
+            finalDate.setFullYear(year - 1);
+            tempTotalResults.filesList[i].SortTime = finalDate.getTime();
+        }
+        totalResults = tempTotalResults;
+        sortArray(totalResults.filesList);
+    }
+    </script>
+</body>
+
+</html>
