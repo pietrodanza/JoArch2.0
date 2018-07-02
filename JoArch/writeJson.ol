@@ -22,7 +22,6 @@ main
       println@Console(request)();
       file.content = request;
       file.filename = global.i + "_trace.json";
-      file.format = "json";
       writeFile@File(file)(responseF);
     response = "arrivato";
     global.i++
